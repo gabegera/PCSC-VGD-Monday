@@ -30,21 +30,9 @@ public class bossController : MonoBehaviour
             projTimer = 0;
 
             GameObject b1 = Instantiate(circleProj, new Vector2(transform.position.x, transform.position.y), zero);
-            b1.GetComponent<Rigidbody2D>().angularVelocity = projSpeed;
+            b1.GetComponent<Rigidbody2D>().velocity = b1.transform.forward * projSpeed;
             b1.GetComponent<Rigidbody2D>().rotation = 30;
             Physics2D.IgnoreCollision(b1.GetComponent<CircleCollider2D>(), GetComponent<CircleCollider2D>());
-
-            GameObject b2 = Instantiate(circleProj, new Vector2(transform.position.x, transform.position.y), zero);
-            b2.GetComponent<Rigidbody2D>().velocity = new Vector2(projSpeed, projSpeed);
-            Physics2D.IgnoreCollision(b2.GetComponent<CircleCollider2D>(), GetComponent<CircleCollider2D>());
-
-            GameObject b3 = Instantiate(circleProj, new Vector2(transform.position.x, transform.position.y), zero);
-            b3.GetComponent<Rigidbody2D>().velocity = new Vector2(projSpeed, projSpeed);
-            Physics2D.IgnoreCollision(b3.GetComponent<CircleCollider2D>(), GetComponent<CircleCollider2D>());
-
-            GameObject b4 = Instantiate(circleProj, new Vector2(transform.position.x, transform.position.y), zero);
-            b4.GetComponent<Rigidbody2D>().velocity = new Vector2(projSpeed, projSpeed);
-            Physics2D.IgnoreCollision(b4.GetComponent<CircleCollider2D>(), GetComponent<CircleCollider2D>());
         }
 
     }
