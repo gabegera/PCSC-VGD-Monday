@@ -6,10 +6,20 @@ public class playerController : MonoBehaviour
 {
     //Components
     private Rigidbody2D myRB;
+    public GameObject missile;
+    public GameObject volleyShot;
+    public GameObject trackingMissile;
 
     //Bools
     public bool movementPressed;
     public bool isFacingRight;
+    public bool missileEquipped;
+    public bool volleyEquipped;
+    public bool trackingMissileEquipped;
+
+    //Vectors
+    public Vector2 lookpos;
+    private Quaternion zero;
 
     //Floats
     public float maxSpeed;
@@ -24,12 +34,27 @@ public class playerController : MonoBehaviour
     public float dashTimer;
     public float dashCooldown;
     public float dashSpeed;
+    public float projSpeed;
+    public float projAngle;
+    public float projLifeSpan;
+    public float missileCooldown;
+    public float volleyCooldown;
+    public float trackingMissileCooldown;
+    public float missileFireRate;
+    public float volleyFireRate;
+    public float trackingMissileFireRate;
+    public float volleyCount;
+    public float volleyMaxCount;
+    public float volleySpeed;
 
 
     // Start is called before the first frame update
     void Start()
     {
         myRB = GetComponent<Rigidbody2D>();
+        missileEquipped = true;
+        isFacingRight = true;
+        
     }
 
     // Update is called once per frame
@@ -150,12 +175,104 @@ public class playerController : MonoBehaviour
         }
         //
 
+        //Shooting Cooldown
+        if (missileCooldown > 0)
+        {
+            missileCooldown -= Time.deltaTime;
+        }
+        if (volleyCooldown > 0)
+        {
+            volleyCooldown -= Time.deltaTime;
+        }
+        if (trackingMissileCooldown > 0)
+        {
+            trackingMissileCooldown -= Time.deltaTime;
+        }
+        //
+
+        //Selecting Weapons
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            missileEquipped = true;
+            volleyEquipped = false;
+            trackingMissileEquipped = false;
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            missileEquipped = false;
+            volleyEquipped = true;
+            trackingMissileEquipped = false;
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            missileEquipped = false;
+            volleyEquipped = false;
+            trackingMissileEquipped = true;
+        }
+
+        //Shooting
+        if (Input.GetMouseButtonDown(0))
+        {
+            if (missileEquipped == true && missileCooldown <= 0)
+            {
+                missileCooldown = missileFireRate;
+                lookpos = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
+                projAngle = Mathf.Atan2(lookpos.y, lookpos.x) * Mathf.Rad2Deg;
+                GameObject b = Instantiate(missile, new Vector2(transform.position.x, transform.position.y), zero);
+                Physics2D.IgnoreCollision(b.GetComponent<PolygonCollider2D>(), GetComponent<BoxCollider2D>());
+                b.GetComponent<Rigidbody2D>().rotation = projAngle - 90;
+                b.GetComponent<Rigidbody2D>().velocity = new Vector2(projSpeed * Mathf.Cos(projAngle * Mathf.Deg2Rad), projSpeed * Mathf.Sin(projAngle * Mathf.Deg2Rad));
+                Destroy(b, projLifeSpan);
+            }
+
+            if (volleyEquipped == true && volleyCooldown <= 0)
+            {
+                volleyCooldown = volleyFireRate;
+                StartCoroutine("volleyBurst");
+            }
+
+            if (trackingMissileEquipped == true && trackingMissileCooldown <= 0)
+            {
+                trackingMissileCooldown = trackingMissileFireRate;
+                lookpos = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
+                projAngle = Mathf.Atan2(lookpos.y, lookpos.x) * Mathf.Rad2Deg;
+                GameObject b = Instantiate(trackingMissile, new Vector2(transform.position.x, transform.position.y), zero);
+                Physics2D.IgnoreCollision(b.GetComponent<PolygonCollider2D>(), GetComponent<BoxCollider2D>());
+                b.GetComponent<Rigidbody2D>().rotation = projAngle - 90;
+                b.GetComponent<Rigidbody2D>().velocity = new Vector2(projSpeed * Mathf.Cos(projAngle * Mathf.Deg2Rad), projSpeed * Mathf.Sin(projAngle * Mathf.Deg2Rad));
+            }
 
 
+
+        }
+
+        if (volleyCount >= volleyMaxCount)
+        {
+            volleyCount = 0;
+        }
+        //
+
+        //Updates X Velocity
         Vector2 velocity;
         velocity = myRB.velocity;
         velocity.x = speed;
         myRB.velocity = velocity;
-        
+        //
     }
+
+    IEnumerator volleyBurst()
+    {
+        while (volleyCount < volleyMaxCount)
+        {
+            yield return new WaitForSeconds(volleySpeed);
+            volleyCount += 1;
+            lookpos = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
+            projAngle = Mathf.Atan2(lookpos.y, lookpos.x) * Mathf.Rad2Deg;
+            GameObject b = Instantiate(volleyShot, new Vector2(transform.position.x, transform.position.y), zero);
+            Physics2D.IgnoreCollision(b.GetComponent<CircleCollider2D>(), GetComponent<BoxCollider2D>());
+            b.GetComponent<Rigidbody2D>().velocity = new Vector2(projSpeed * Mathf.Cos(projAngle * Mathf.Deg2Rad), projSpeed * Mathf.Sin(projAngle * Mathf.Deg2Rad));
+        }
+
+    }
+
 }
