@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class trackingMissileController : MonoBehaviour
 {
+    //Vectors
+    public Vector2 lookpos;
+    private Quaternion zero;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -13,7 +18,7 @@ public class trackingMissileController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -25,7 +30,7 @@ public class trackingMissileController : MonoBehaviour
     {
         if (collision.gameObject.name.Contains("toaster"))
         {
-
+            
         }
     }
 }

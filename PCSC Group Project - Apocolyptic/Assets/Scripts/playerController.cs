@@ -22,6 +22,7 @@ public class playerController : MonoBehaviour
     private Quaternion zero;
 
     //Floats
+    public float health;
     public float maxSpeed;
     public float speed;
     public float accelaration;
@@ -273,6 +274,19 @@ public class playerController : MonoBehaviour
             b.GetComponent<Rigidbody2D>().velocity = new Vector2(projSpeed * Mathf.Cos(projAngle * Mathf.Deg2Rad), projSpeed * Mathf.Sin(projAngle * Mathf.Deg2Rad));
         }
 
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.name.Contains("toaster"))
+        {
+            health -= 20;
+        }
+
+        if (collision.gameObject.name.Contains("lightbulbAttack"))
+        {
+            health -= 40;
+        }
     }
 
 }

@@ -11,6 +11,7 @@ public class gameManager : MonoBehaviour
     public Image missileIcon;
     public Image volleyIcon;
     public Image trackingIcon;
+    public Text healthText;
 
 
 
@@ -23,6 +24,10 @@ public class gameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Updates Health Text
+        healthText.text = "Health: " + player.health;
+        //
+
         //Dash Cooldown
         if (player.dashCooldown <= 0)
         {
