@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 556093830841927518}
   - component: {fileID: 556093830841927513}
-  - component: {fileID: 556093830841927512}
   - component: {fileID: 556093830841927515}
+  - component: {fileID: 579447373214643886}
   - component: {fileID: 2469549449560296953}
   m_Layer: 0
   m_Name: volleyShot
@@ -29,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 556093830841927514}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 1.916, y: -1.475, z: 0}
-  m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -74,33 +74,18 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: b688b6d601613884e9b9f045c79b9b0d, type: 3}
+  m_Sprite: {fileID: 4405297830623518684, guid: da2f4d317d097cb4794abea879ccd3b2,
+    type: 3}
   m_Color: {r: 0.8978461, g: 1, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.1, y: 0.15}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!58 &556093830841927512
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 556093830841927514}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 0.5
 --- !u!50 &556093830841927515
 Rigidbody2D:
   serializedVersion: 4
@@ -122,6 +107,37 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!60 &579447373214643886
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 556093830841927514}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 0.1, y: 0.15}
+    newSize: {x: 0.1, y: 0.15}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: -0.04, y: 0.074999996}
+      - {x: -0.049999997, y: 0.065}
+      - {x: -0.049999997, y: -0.074999996}
+      - {x: 0.049999997, y: -0.074999996}
+      - {x: 0.049999997, y: 0.065}
+      - {x: 0.04, y: 0.074999996}
 --- !u!114 &2469549449560296953
 MonoBehaviour:
   m_ObjectHideFlags: 0

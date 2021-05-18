@@ -26,6 +26,8 @@ public class lightbulbController : MonoBehaviour
     public float xRayDistance;
     public float yRayDistance;
     public float knockback;
+    public float attackCooldown;
+    public float attackTimer;
 
 
     // Start is called before the first frame update
@@ -55,35 +57,46 @@ public class lightbulbController : MonoBehaviour
 
         if (playerDetected == true && detectionCooldown <= 0)
         {
-            if (playerDirection > 0)
+            if (playerDirection > 1.5)
             {
                 Vector2 velocity;
                 velocity = RB.velocity;
                 velocity.x = -speed;
                 RB.velocity = velocity;
             }
-            else if (playerDirection < 0)
+            else if (playerDirection < -1.5)
             {
                 Vector2 velocity;
                 velocity = RB.velocity;
                 velocity.x = speed;
                 RB.velocity = velocity;
             }
+            else
+            {
+                Vector2 velocity;
+                velocity = RB.velocity;
+                velocity.x = 0;
+                RB.velocity = velocity;
+            }
         }
 
-        if (leftRay.collider.gameObject.name.Contains("player"))
+        if (playerDirection > 0 && playerDirection < 2 && attackCooldown <= 0)
         {
             GameObject b = Instantiate(attack, new Vector2(transform.position.x - 1, transform.position.y), zero);
-            Physics2D.IgnoreCollision(GetComponent<PolygonCollider2D>(), b.GetComponent<BoxCollider2D>());
-            Debug.Log("hit");
+            attackCooldown = attackTimer;
+            Physics2D.IgnoreCollision(GetComponent<BoxCollider2D>(), b.GetComponent<BoxCollider2D>());
         }
-        if (rightRay.collider.gameObject.name.Contains("player"))
+        else if (playerDirection < 0 && playerDirection > -2 && attackCooldown <= 0)
         {
             GameObject b = Instantiate(attack, new Vector2(transform.position.x + 1, transform.position.y), zero);
-            Physics2D.IgnoreCollision(GetComponent<PolygonCollider2D>(), b.GetComponent<BoxCollider2D>());
-            Debug.Log("hit");
+            attackCooldown = attackTimer;
+            Physics2D.IgnoreCollision(GetComponent<BoxCollider2D>(), b.GetComponent<BoxCollider2D>());
         }
 
+        if (attackCooldown > 0)
+        {
+            attackCooldown -= Time.deltaTime;
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -109,31 +122,31 @@ public class lightbulbController : MonoBehaviour
             health -= trackingDamage;
         }
 
-        if (collision.gameObject.name.Contains("player"))
-        {
-            if (playerDirection > 0)
-            {
-                //RB.AddForce(collision.relativeVelocity * (knockback * 100), ForceMode2D.Force);
-                playerDetected = false;
-                detectionCooldown = detectionTimer;
-                Vector2 velocity;
-                velocity = RB.velocity;
-                velocity.x = knockback;
-                velocity.y = knockback;
-                RB.velocity = velocity;
-            }
-            else if (playerDirection < 0)
-            {
-                //RB.AddForce(collision.relativeVelocity * (knockback * 100), ForceMode2D.Force);
-                playerDetected = false;
-                detectionCooldown = detectionTimer;
-                Vector2 velocity;
-                velocity = RB.velocity;
-                velocity.x = -knockback;
-                velocity.y = knockback;
-                RB.velocity = velocity;
-            }
-        }
+        //if (collision.gameObject.name.Contains("player"))
+        //{
+        //    if (playerDirection > 0)
+        //    {
+        //        //RB.AddForce(collision.relativeVelocity * (knockback * 100), ForceMode2D.Force);
+        //        playerDetected = false;
+        //        detectionCooldown = detectionTimer;
+        //        Vector2 velocity;
+        //        velocity = RB.velocity;
+        //        velocity.x = knockback;
+        //        velocity.y = knockback;
+        //        RB.velocity = velocity;
+        //    }
+        //    else if (playerDirection < 0)
+        //    {
+        //        //RB.AddForce(collision.relativeVelocity * (knockback * 100), ForceMode2D.Force);
+        //        playerDetected = false;
+        //        detectionCooldown = detectionTimer;
+        //        Vector2 velocity;
+        //        velocity = RB.velocity;
+        //        velocity.x = -knockback;
+        //        velocity.y = knockback;
+        //        RB.velocity = velocity;
+        //    }
+        //}
     }
 
     private void OnTriggerStay2D(Collider2D collision)

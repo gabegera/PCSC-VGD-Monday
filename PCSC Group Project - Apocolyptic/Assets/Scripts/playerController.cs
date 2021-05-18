@@ -270,8 +270,9 @@ public class playerController : MonoBehaviour
             lookpos = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
             projAngle = Mathf.Atan2(lookpos.y, lookpos.x) * Mathf.Rad2Deg;
             GameObject b = Instantiate(volleyShot, new Vector2(transform.position.x, transform.position.y), zero);
-            Physics2D.IgnoreCollision(b.GetComponent<CircleCollider2D>(), GetComponent<BoxCollider2D>());
+            Physics2D.IgnoreCollision(b.GetComponent<PolygonCollider2D>(), GetComponent<BoxCollider2D>());
             b.GetComponent<Rigidbody2D>().velocity = new Vector2(projSpeed * Mathf.Cos(projAngle * Mathf.Deg2Rad), projSpeed * Mathf.Sin(projAngle * Mathf.Deg2Rad));
+            b.GetComponent<Rigidbody2D>().rotation = projAngle - 90;
         }
 
     }
