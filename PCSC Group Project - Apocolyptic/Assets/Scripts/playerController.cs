@@ -9,9 +9,11 @@ public class playerController : MonoBehaviour
     public GameObject missile;
     public GameObject volleyShot;
     public GameObject trackingMissile;
+    public Animator myAnim;
 
     //Bools
     public bool movementPressed;
+    public bool wallGrabbing;
     public bool isFacingRight;
     public bool missileEquipped;
     public bool volleyEquipped;
@@ -30,8 +32,10 @@ public class playerController : MonoBehaviour
     public float xRayDistance;
     public float yRayDistance;
     public float jumpSpeed;
+    public float doubleJumpSpeed;
     public float jumpCount;
     public float maxJumps;
+    public float wallJumpSpeed;
     public float dashTimer;
     public float dashCooldown;
     public float dashSpeed;
@@ -47,6 +51,7 @@ public class playerController : MonoBehaviour
     public float volleyCount;
     public float volleyMaxCount;
     public float volleySpeed;
+    public float fallMultiplier;
 
 
     // Start is called before the first frame update
@@ -55,7 +60,7 @@ public class playerController : MonoBehaviour
         myRB = GetComponent<Rigidbody2D>();
         missileEquipped = true;
         isFacingRight = true;
-        
+        myAnim = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -103,6 +108,104 @@ public class playerController : MonoBehaviour
         }
         //
 
+        //Animations
+        if (groundRay == false && isFacingRight == true)
+        {
+            myAnim.SetBool("notMoving", false);
+            myAnim.SetBool("notMovingLeft", false);
+            myAnim.SetBool("isWalkingLeft", false);
+            myAnim.SetBool("isWalking", false);
+            myAnim.SetBool("isRunningLeft", false);
+            myAnim.SetBool("isRunning", false);
+            myAnim.SetBool("isJumping", true);
+            myAnim.SetBool("isJumpingLeft", false);
+        }
+        else if (groundRay == false && isFacingRight == false)
+        {
+            myAnim.SetBool("notMoving", false);
+            myAnim.SetBool("notMovingLeft", false);
+            myAnim.SetBool("isWalkingLeft", false);
+            myAnim.SetBool("isWalking", false);
+            myAnim.SetBool("isRunningLeft", false);
+            myAnim.SetBool("isRunning", false);
+            myAnim.SetBool("isJumping", false);
+            myAnim.SetBool("isJumpingLeft", true);
+        }
+        else if (speed > 0 && speed < 5 && groundRay)
+        {
+            myAnim.SetBool("notMoving", false);
+            myAnim.SetBool("notMovingLeft", false);
+            myAnim.SetBool("isWalkingLeft", false);
+            myAnim.SetBool("isWalking", true);
+            myAnim.SetBool("isRunningLeft", false);
+            myAnim.SetBool("isRunning", false);
+            myAnim.SetBool("isJumping", false);
+            myAnim.SetBool("isJumpingLeft", false);
+        }
+        else if (speed < 0 && speed > -5 && groundRay)
+        {
+            myAnim.SetBool("notMoving", false);
+            myAnim.SetBool("notMovingLeft", false);
+            myAnim.SetBool("isWalking", false);
+            myAnim.SetBool("isWalkingLeft", true);
+            myAnim.SetBool("isRunningLeft", false);
+            myAnim.SetBool("isRunning", false);
+            myAnim.SetBool("isJumping", false);
+            myAnim.SetBool("isJumpingLeft", false);
+        }
+        else if (speed > 5 && groundRay)
+        {
+            myAnim.SetBool("notMoving", false);
+            myAnim.SetBool("notMovingLeft", false);
+            myAnim.SetBool("isWalkingLeft", false);
+            myAnim.SetBool("isWalking", false);
+            myAnim.SetBool("isRunningLeft", false);
+            myAnim.SetBool("isRunning", true);
+            myAnim.SetBool("isJumping", false);
+            myAnim.SetBool("isJumpingLeft", false);
+        }
+        else if (speed < -5 && groundRay)
+        {
+            myAnim.SetBool("notMoving", false);
+            myAnim.SetBool("notMovingLeft", false);
+            myAnim.SetBool("isWalkingLeft", false);
+            myAnim.SetBool("isWalking", false);
+            myAnim.SetBool("isRunningLeft", true);
+            myAnim.SetBool("isRunning", false);
+            myAnim.SetBool("isJumping", false);
+            myAnim.SetBool("isJumpingLeft", false);
+        }
+        else if (isFacingRight && speed == 0 && groundRay)
+        {
+            myAnim.SetBool("isWalkingLeft", false);
+            myAnim.SetBool("isWalking", false);
+            myAnim.SetBool("notMovingLeft", false);
+            myAnim.SetBool("notMoving", true);
+            myAnim.SetBool("isRunningLeft", false);
+            myAnim.SetBool("isRunning", false);
+            myAnim.SetBool("isJumping", false);
+            myAnim.SetBool("isJumpingLeft", false);
+        }
+        else if (isFacingRight == false && speed == 0 && groundRay)
+        {
+            myAnim.SetBool("isWalking", false);
+            myAnim.SetBool("isWalkingLeft", false);
+            myAnim.SetBool("notMoving", false);
+            myAnim.SetBool("notMovingLeft", true);
+            myAnim.SetBool("isRunningLeft", false);
+            myAnim.SetBool("isRunning", false);
+            myAnim.SetBool("isJumping", false);
+            myAnim.SetBool("isJumpingLeft", false);
+        }
+        //
+
+        //Makes the falling Speed Faster
+        if ((myRB.velocity.y <= 0) && (wallGrabbing == false))
+        {
+            myRB.velocity += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1) * Time.deltaTime; 
+        }
+        //
+
         //Detect when Movement Keys are Pressed
         if ((Input.GetKey(KeyCode.A)) || (Input.GetKey(KeyCode.D)))
         {
@@ -126,29 +229,44 @@ public class playerController : MonoBehaviour
         {
             jumpCount += 1;
             Vector2 jumpVel = myRB.velocity;
-            jumpVel.y = jumpSpeed;
+            jumpVel.y = doubleJumpSpeed;
             myRB.velocity = jumpVel;
         }
         //
 
         //Wall Grabbing
-        if ((rightRay || leftRay) && (groundRay == false))
+        if ((Input.GetKeyDown(KeyCode.LeftShift)) && (rightRay || leftRay) && (groundRay == false))
+        {
+            Vector2 jumpVel = myRB.velocity;
+            jumpVel.y = 0;
+            myRB.velocity = jumpVel;
+            jumpCount = 0;
+        }
+
+        if ((Input.GetKey(KeyCode.LeftShift)) && (rightRay || leftRay) && (groundRay == false))
         {
             myRB.gravityScale = 0;
-            jumpCount = 0;
+            speed = 0;
+            wallGrabbing = true;
         }
         else
         {
+            wallGrabbing = false;
             myRB.gravityScale = 1;
         }
         //
 
-
-        //Wall Stopping
-        if ((leftRay || rightRay) && (movementPressed == false))
+        //Wall Jumping
+        if (wallGrabbing && Input.GetKey(KeyCode.Space))
         {
-            speed = 0;
-            
+            if (leftRay)
+            {
+                speed = wallJumpSpeed;
+            }
+            else if (rightRay)
+            {
+                speed = -wallJumpSpeed;
+            }
         }
         //
 
@@ -160,7 +278,7 @@ public class playerController : MonoBehaviour
         //
 
         //Dashing
-        if ((Input.GetKeyDown(KeyCode.LeftShift)) && (dashCooldown <= 0))
+        if ((Input.GetKeyDown(KeyCode.LeftControl)) && (dashCooldown <= 0))
         {
             dashCooldown = dashTimer;
             if (isFacingRight == true)

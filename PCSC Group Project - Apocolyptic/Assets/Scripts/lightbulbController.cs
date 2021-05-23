@@ -34,6 +34,7 @@ public class lightbulbController : MonoBehaviour
     void Start()
     {
         RB = GetComponent<Rigidbody2D>();
+        player = GameObject.Find("player");
     }
 
     // Update is called once per frame
@@ -154,6 +155,14 @@ public class lightbulbController : MonoBehaviour
         if (collision.gameObject.name.Contains("player"))
         {
             playerDetected = true;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.name.Contains("player"))
+        {
+            playerDetected = false;
         }
     }
 }
