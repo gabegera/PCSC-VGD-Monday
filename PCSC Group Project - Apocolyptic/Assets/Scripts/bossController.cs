@@ -5,37 +5,110 @@ using UnityEngine;
 public class bossController : MonoBehaviour
 {
     private Component myRB;
-    public GameObject circleProj;
-    private Quaternion zero;
+    private Animator myAnim;
+    public GameObject bullet;
+    public GameObject player;
 
+    private Quaternion zero;
+    private Vector2 playerPos;
+
+    public bool canShoot;
+
+    public float health;
     public float projSpeed;
-    public float projRotation;
-    public float projTimer;
     public float fireRate;
+    public float burstCount;
+    public float burstMax;
+    public float burstCooldown;
+    private float startingBurstCooldown;
+    public float projAngle;
+    public float bulletLifeSpan;
+
+    public float volleyDamage;
+    public float trackingDamage;
+    public float missileDamage;
 
 
     // Start is called before the first frame update
     void Start()
     {
+        startingBurstCooldown = burstCooldown;
         myRB = GetComponent<Rigidbody2D>();
+        myAnim = GetComponent<Animator>();
+        player = GameObject.Find("player");
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (projTimer < 1)
+        playerPos = player.transform.position;
+        
+        if (burstCount == burstMax)
         {
-            projTimer = projTimer + (fireRate * Time.deltaTime);
+            StopCoroutine("burst");
+            burstCooldown = startingBurstCooldown;
+            burstCount = 0;
         }
-        else if (projTimer > 1)
-        {
-            projTimer = 0;
 
-            GameObject b1 = Instantiate(circleProj, new Vector2(transform.position.x, transform.position.y), zero);
-            //b1.GetComponent<Rigidbody2D>().velocity
-            b1.GetComponent<Rigidbody2D>().rotation = 0 + projRotation;
-            Physics2D.IgnoreCollision(b1.GetComponent<CircleCollider2D>(), GetComponent<CircleCollider2D>());
+        if (burstCooldown > 0)
+        {
+            burstCooldown -= Time.deltaTime;
+        }
+        else
+        {
+            burstCooldown = 0;
+        }
+
+        if (burstCooldown <= 0)
+        {
+            canShoot = true;
+        }
+        else
+        {
+            canShoot = false;
+        }
+
+        if (canShoot)
+        {
+            myAnim.SetBool("isAttacking", true);
+            StartCoroutine("burst");
+        }
+        else
+        {
+            myAnim.SetBool("isAttacking", false);
         }
 
     }
+
+    IEnumerator burst()
+    {
+        while (burstCount < burstMax)
+        {
+            yield return new WaitForSeconds(fireRate);
+            burstCount += 1;
+            projAngle = Mathf.Atan2(playerPos.y, playerPos.x) * Mathf.Rad2Deg;
+            GameObject b = Instantiate(bullet, new Vector2(transform.position.x, transform.position.y), zero);
+            Physics2D.IgnoreCollision(b.GetComponent<PolygonCollider2D>(), GetComponent<PolygonCollider2D>());
+            b.GetComponent<Rigidbody2D>().rotation = projAngle - 90;
+            b.GetComponent<Rigidbody2D>().velocity = new Vector2(projSpeed * Mathf.Cos(projAngle * Mathf.Deg2Rad), projSpeed * Mathf.Sin(projAngle * Mathf.Deg2Rad));
+            Destroy(b, bulletLifeSpan);
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.name.Contains("volley"))
+        {
+            health -= volleyDamage;
+        }
+        else if (collision.gameObject.name.Contains("tracking"))
+        {
+            health -= trackingDamage;
+        }
+        else if (collision.gameObject.name.Contains("missile"))
+        {
+            health -= missileDamage;
+        }
+    }
+
 }

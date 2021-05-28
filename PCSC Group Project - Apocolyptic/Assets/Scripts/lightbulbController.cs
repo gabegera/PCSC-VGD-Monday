@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class lightbulbController : MonoBehaviour
 {
+    public playerController playerController;
     public GameObject player;
-    public GameObject attack;
+    //public GameObject attack;
     private Rigidbody2D RB;
 
     private Quaternion zero;
@@ -34,6 +35,7 @@ public class lightbulbController : MonoBehaviour
     void Start()
     {
         RB = GetComponent<Rigidbody2D>();
+        playerController = GameObject.Find("player").GetComponent<playerController>();
         player = GameObject.Find("player");
     }
 
@@ -81,17 +83,22 @@ public class lightbulbController : MonoBehaviour
             }
         }
 
-        if (playerDirection > 0 && playerDirection < 2 && attackCooldown <= 0)
+        if (leftRay.collider.gameObject.Equals(player))
         {
-            GameObject b = Instantiate(attack, new Vector2(transform.position.x - 1, transform.position.y), zero);
-            attackCooldown = attackTimer;
-            Physics2D.IgnoreCollision(GetComponent<BoxCollider2D>(), b.GetComponent<BoxCollider2D>());
+            if (attackCooldown <= 0)
+            {
+                playerController.health -= 1;
+                attackCooldown = attackTimer;
+            }
+
         }
-        else if (playerDirection < 0 && playerDirection > -2 && attackCooldown <= 0)
+        else if (rightRay.collider.gameObject.Equals(player))
         {
-            GameObject b = Instantiate(attack, new Vector2(transform.position.x + 1, transform.position.y), zero);
-            attackCooldown = attackTimer;
-            Physics2D.IgnoreCollision(GetComponent<BoxCollider2D>(), b.GetComponent<BoxCollider2D>());
+            if (attackCooldown <= 0)
+            {
+                playerController.health -= 1;
+                attackCooldown = attackTimer;
+            }
         }
 
         if (attackCooldown > 0)

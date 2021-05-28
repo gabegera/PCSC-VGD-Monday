@@ -12,10 +12,10 @@ GameObject:
   - component: {fileID: 8584691867772316221}
   - component: {fileID: 4499018792322607611}
   - component: {fileID: 6552255474335273409}
-  - component: {fileID: 4197019063876605399}
   - component: {fileID: 545910674727040073}
+  - component: {fileID: 4197019063876605399}
   m_Layer: 2
-  m_Name: lightbulbEnemy 1
+  m_Name: lightbulbEnemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -124,37 +124,6 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 4
---- !u!114 &4197019063876605399
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 545910674727040078}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 238da6d47a3b1b6408572e019e3a2299, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  player: {fileID: 0}
-  attack: {fileID: 6408123387358451367, guid: 975fb4b51df3c7f42806360c20ed9987, type: 3}
-  playerDetected: 0
-  health: 100
-  missileDamage: 80
-  volleyDamage: 18
-  trackingDamage: 100
-  maxSpeed: 0
-  speed: 5
-  accelaration: 0
-  deceleration: 0
-  playerDirection: 0
-  detectionCooldown: 0
-  detectionTimer: 0
-  xRayDistance: 1.1
-  yRayDistance: 0.52
-  knockback: 0
-  attackCooldown: 0
-  attackTimer: 0.6
 --- !u!61 &545910674727040073
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -181,3 +150,34 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.24, y: 0.58}
   m_EdgeRadius: 0
+--- !u!114 &4197019063876605399
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 545910674727040078}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 238da6d47a3b1b6408572e019e3a2299, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 5729143077642523528, guid: b7bd2a60ddd0fc04a9a0b0aca56bad30, type: 3}
+  attack: {fileID: 6408123387358451367, guid: 975fb4b51df3c7f42806360c20ed9987, type: 3}
+  playerDetected: 0
+  health: 100
+  missileDamage: 80
+  volleyDamage: 18
+  trackingDamage: 100
+  maxSpeed: 0
+  speed: 5
+  accelaration: 0
+  deceleration: 0
+  playerDirection: 0
+  detectionCooldown: 0
+  detectionTimer: 0
+  xRayDistance: 2
+  yRayDistance: 0.52
+  knockback: 0
+  attackCooldown: 0
+  attackTimer: 0.6

@@ -11,6 +11,18 @@ public class gameManager : MonoBehaviour
     public Image missileIcon;
     public Image volleyIcon;
     public Image trackingIcon;
+
+    public Sprite heart;
+    public Sprite halfHeart;
+
+    public Image health1;
+    public Image health2;
+    public Image health3;
+    public Image halfheart1;
+    public Image halfheart2;
+    public Image halfheart3;
+
+
     public Text healthText;
 
 
@@ -18,7 +30,7 @@ public class gameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        player = GameObject.Find("player").GetComponent<playerController>();
     }
 
     // Update is called once per frame
@@ -27,6 +39,34 @@ public class gameManager : MonoBehaviour
         //Updates Health Text
         healthText.text = "Health: " + player.health;
         //
+
+        //Updates Health Icons
+        if (player.health <= 5)
+        {
+            health3.enabled = false;
+        }
+        if (player.health <= 4)
+        {
+            halfheart3.enabled = false;
+        }
+        if (player.health <= 3)
+        {
+            health2.enabled = false;
+        }
+        if (player.health <= 2)
+        {
+            halfheart2.enabled = false;
+        }
+        if (player.health <= 1)
+        {
+            health1.enabled = false;
+        }
+        if (player.health <= 0)
+        {
+            halfheart1.enabled = false;
+        }
+        //
+
 
         //Dash Cooldown
         if (player.dashCooldown <= 0)

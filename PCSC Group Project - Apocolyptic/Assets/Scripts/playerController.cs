@@ -21,6 +21,7 @@ public class playerController : MonoBehaviour
 
     //Vectors
     public Vector2 lookpos;
+    public Vector2 feet;
     private Quaternion zero;
 
     //Floats
@@ -66,9 +67,13 @@ public class playerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        feet = transform.position;
+        feet.y -= 0.8f;
+
         RaycastHit2D groundRay = Physics2D.Raycast(transform.position, transform.TransformDirection(Vector2.down), yRayDistance);
-        RaycastHit2D rightRay = Physics2D.Raycast(transform.position, transform.TransformDirection(Vector2.right), xRayDistance);
-        RaycastHit2D leftRay = Physics2D.Raycast(transform.position, transform.TransformDirection(Vector2.left), xRayDistance);
+        RaycastHit2D rightRay = Physics2D.Raycast(feet, transform.TransformDirection(Vector2.right), xRayDistance);
+        RaycastHit2D leftRay = Physics2D.Raycast(feet, transform.TransformDirection(Vector2.left), xRayDistance);
+
 
         //Movement with acceleration
         if ((Input.GetKey(KeyCode.A)) && (speed > 0))
@@ -108,94 +113,14 @@ public class playerController : MonoBehaviour
         }
         //
 
-        //Animations
-        if (groundRay == false && isFacingRight == true)
+        //Stops movement when running into a wall
+        if (Input.GetKey(KeyCode.A) && leftRay && isFacingRight == false)
         {
-            myAnim.SetBool("notMoving", false);
-            myAnim.SetBool("notMovingLeft", false);
-            myAnim.SetBool("isWalkingLeft", false);
-            myAnim.SetBool("isWalking", false);
-            myAnim.SetBool("isRunningLeft", false);
-            myAnim.SetBool("isRunning", false);
-            myAnim.SetBool("isJumping", true);
-            myAnim.SetBool("isJumpingLeft", false);
+            speed = 0;
         }
-        else if (groundRay == false && isFacingRight == false)
+        else if (Input.GetKey(KeyCode.D) && rightRay && isFacingRight == true)
         {
-            myAnim.SetBool("notMoving", false);
-            myAnim.SetBool("notMovingLeft", false);
-            myAnim.SetBool("isWalkingLeft", false);
-            myAnim.SetBool("isWalking", false);
-            myAnim.SetBool("isRunningLeft", false);
-            myAnim.SetBool("isRunning", false);
-            myAnim.SetBool("isJumping", false);
-            myAnim.SetBool("isJumpingLeft", true);
-        }
-        else if (speed > 0 && speed < 5 && groundRay)
-        {
-            myAnim.SetBool("notMoving", false);
-            myAnim.SetBool("notMovingLeft", false);
-            myAnim.SetBool("isWalkingLeft", false);
-            myAnim.SetBool("isWalking", true);
-            myAnim.SetBool("isRunningLeft", false);
-            myAnim.SetBool("isRunning", false);
-            myAnim.SetBool("isJumping", false);
-            myAnim.SetBool("isJumpingLeft", false);
-        }
-        else if (speed < 0 && speed > -5 && groundRay)
-        {
-            myAnim.SetBool("notMoving", false);
-            myAnim.SetBool("notMovingLeft", false);
-            myAnim.SetBool("isWalking", false);
-            myAnim.SetBool("isWalkingLeft", true);
-            myAnim.SetBool("isRunningLeft", false);
-            myAnim.SetBool("isRunning", false);
-            myAnim.SetBool("isJumping", false);
-            myAnim.SetBool("isJumpingLeft", false);
-        }
-        else if (speed > 5 && groundRay)
-        {
-            myAnim.SetBool("notMoving", false);
-            myAnim.SetBool("notMovingLeft", false);
-            myAnim.SetBool("isWalkingLeft", false);
-            myAnim.SetBool("isWalking", false);
-            myAnim.SetBool("isRunningLeft", false);
-            myAnim.SetBool("isRunning", true);
-            myAnim.SetBool("isJumping", false);
-            myAnim.SetBool("isJumpingLeft", false);
-        }
-        else if (speed < -5 && groundRay)
-        {
-            myAnim.SetBool("notMoving", false);
-            myAnim.SetBool("notMovingLeft", false);
-            myAnim.SetBool("isWalkingLeft", false);
-            myAnim.SetBool("isWalking", false);
-            myAnim.SetBool("isRunningLeft", true);
-            myAnim.SetBool("isRunning", false);
-            myAnim.SetBool("isJumping", false);
-            myAnim.SetBool("isJumpingLeft", false);
-        }
-        else if (isFacingRight && speed == 0 && groundRay)
-        {
-            myAnim.SetBool("isWalkingLeft", false);
-            myAnim.SetBool("isWalking", false);
-            myAnim.SetBool("notMovingLeft", false);
-            myAnim.SetBool("notMoving", true);
-            myAnim.SetBool("isRunningLeft", false);
-            myAnim.SetBool("isRunning", false);
-            myAnim.SetBool("isJumping", false);
-            myAnim.SetBool("isJumpingLeft", false);
-        }
-        else if (isFacingRight == false && speed == 0 && groundRay)
-        {
-            myAnim.SetBool("isWalking", false);
-            myAnim.SetBool("isWalkingLeft", false);
-            myAnim.SetBool("notMoving", false);
-            myAnim.SetBool("notMovingLeft", true);
-            myAnim.SetBool("isRunningLeft", false);
-            myAnim.SetBool("isRunning", false);
-            myAnim.SetBool("isJumping", false);
-            myAnim.SetBool("isJumpingLeft", false);
+            speed = 0;
         }
         //
 
@@ -377,6 +302,98 @@ public class playerController : MonoBehaviour
         velocity.x = speed;
         myRB.velocity = velocity;
         //
+
+        //Animations
+        if (groundRay == false && isFacingRight == true)
+        {
+            myAnim.SetBool("notMoving", false);
+            myAnim.SetBool("notMovingLeft", false);
+            myAnim.SetBool("isWalkingLeft", false);
+            myAnim.SetBool("isWalking", false);
+            myAnim.SetBool("isRunningLeft", false);
+            myAnim.SetBool("isRunning", false);
+            myAnim.SetBool("isJumping", true);
+            myAnim.SetBool("isJumpingLeft", false);
+        }
+        else if (groundRay == false && isFacingRight == false)
+        {
+            myAnim.SetBool("notMoving", false);
+            myAnim.SetBool("notMovingLeft", false);
+            myAnim.SetBool("isWalkingLeft", false);
+            myAnim.SetBool("isWalking", false);
+            myAnim.SetBool("isRunningLeft", false);
+            myAnim.SetBool("isRunning", false);
+            myAnim.SetBool("isJumping", false);
+            myAnim.SetBool("isJumpingLeft", true);
+        }
+        else if (speed > 0 && speed < 5 && groundRay)
+        {
+            myAnim.SetBool("notMoving", false);
+            myAnim.SetBool("notMovingLeft", false);
+            myAnim.SetBool("isWalkingLeft", false);
+            myAnim.SetBool("isWalking", true);
+            myAnim.SetBool("isRunningLeft", false);
+            myAnim.SetBool("isRunning", false);
+            myAnim.SetBool("isJumping", false);
+            myAnim.SetBool("isJumpingLeft", false);
+        }
+        else if (speed < 0 && speed > -5 && groundRay)
+        {
+            myAnim.SetBool("notMoving", false);
+            myAnim.SetBool("notMovingLeft", false);
+            myAnim.SetBool("isWalking", false);
+            myAnim.SetBool("isWalkingLeft", true);
+            myAnim.SetBool("isRunningLeft", false);
+            myAnim.SetBool("isRunning", false);
+            myAnim.SetBool("isJumping", false);
+            myAnim.SetBool("isJumpingLeft", false);
+        }
+        else if (speed > 5 && groundRay)
+        {
+            myAnim.SetBool("notMoving", false);
+            myAnim.SetBool("notMovingLeft", false);
+            myAnim.SetBool("isWalkingLeft", false);
+            myAnim.SetBool("isWalking", false);
+            myAnim.SetBool("isRunningLeft", false);
+            myAnim.SetBool("isRunning", true);
+            myAnim.SetBool("isJumping", false);
+            myAnim.SetBool("isJumpingLeft", false);
+        }
+        else if (speed < -5 && groundRay)
+        {
+            myAnim.SetBool("notMoving", false);
+            myAnim.SetBool("notMovingLeft", false);
+            myAnim.SetBool("isWalkingLeft", false);
+            myAnim.SetBool("isWalking", false);
+            myAnim.SetBool("isRunningLeft", true);
+            myAnim.SetBool("isRunning", false);
+            myAnim.SetBool("isJumping", false);
+            myAnim.SetBool("isJumpingLeft", false);
+        }
+        else if (isFacingRight && speed == 0 && groundRay)
+        {
+            myAnim.SetBool("isWalkingLeft", false);
+            myAnim.SetBool("isWalking", false);
+            myAnim.SetBool("notMovingLeft", false);
+            myAnim.SetBool("notMoving", true);
+            myAnim.SetBool("isRunningLeft", false);
+            myAnim.SetBool("isRunning", false);
+            myAnim.SetBool("isJumping", false);
+            myAnim.SetBool("isJumpingLeft", false);
+        }
+        else if (isFacingRight == false && speed == 0 && groundRay)
+        {
+            myAnim.SetBool("isWalking", false);
+            myAnim.SetBool("isWalkingLeft", false);
+            myAnim.SetBool("notMoving", false);
+            myAnim.SetBool("notMovingLeft", true);
+            myAnim.SetBool("isRunningLeft", false);
+            myAnim.SetBool("isRunning", false);
+            myAnim.SetBool("isJumping", false);
+            myAnim.SetBool("isJumpingLeft", false);
+        }
+        //
+
     }
 
     IEnumerator volleyBurst()
@@ -399,12 +416,7 @@ public class playerController : MonoBehaviour
     {
         if (collision.gameObject.name.Contains("toaster"))
         {
-            health -= 20;
-        }
-
-        if (collision.gameObject.name.Contains("lightbulbAttack"))
-        {
-            health -= 40;
+            health -= 1;
         }
     }
 
