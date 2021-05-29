@@ -14,7 +14,8 @@ GameObject:
   - component: {fileID: 7438693491227427282}
   - component: {fileID: 4366374703219638371}
   - component: {fileID: 3371735436197288473}
-  m_Layer: 0
+  - component: {fileID: 1129735756665285434}
+  m_Layer: 10
   m_Name: toasterEnemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -177,4 +178,23 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 8
+  m_Radius: 4
+--- !u!95 &1129735756665285434
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3546803642141367926}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 9ce44c8bf836bee429496cd7fd2794ed, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0

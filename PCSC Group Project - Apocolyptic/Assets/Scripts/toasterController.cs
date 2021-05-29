@@ -5,6 +5,7 @@ using UnityEngine;
 public class toasterController : MonoBehaviour
 {
     public GameObject player;
+    private Animator myAnim;
     private Rigidbody2D RB;
 
     public bool playerDetected;
@@ -29,6 +30,7 @@ public class toasterController : MonoBehaviour
     void Start()
     {
         RB = GetComponent<Rigidbody2D>();
+        myAnim = GetComponent<Animator>();
         player = GameObject.Find("player");
     }
 
@@ -55,6 +57,7 @@ public class toasterController : MonoBehaviour
         {
             if (playerDirection > 0)
             {
+                myAnim.SetBool("isWalking", true);
                 Vector2 velocity;
                 velocity = RB.velocity;
                 velocity.x = -speed;
@@ -62,11 +65,16 @@ public class toasterController : MonoBehaviour
             }
             else if (playerDirection < 0)
             {
+                myAnim.SetBool("isWalking", true);
                 Vector2 velocity;
                 velocity = RB.velocity;
                 velocity.x = speed;
                 RB.velocity = velocity;
             }
+        }
+        else
+        {
+            myAnim.SetBool("isWalking", false);
         }
 
 

@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class volleyController : MonoBehaviour
+public class Level1End : MonoBehaviour
 {
     // Start is called before the first frame update
     void Start()
@@ -18,15 +19,9 @@ public class volleyController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.name.Contains("bossBullet"))
+        if (collision.gameObject.name.Contains("player"))
         {
-            Physics2D.IgnoreCollision(GetComponent<PolygonCollider2D>(), collision.gameObject.GetComponent<PolygonCollider2D>());
+            SceneManager.LoadScene("Level2");
         }
-        else
-        {
-            Destroy(gameObject);
-        }
-
-            
     }
 }

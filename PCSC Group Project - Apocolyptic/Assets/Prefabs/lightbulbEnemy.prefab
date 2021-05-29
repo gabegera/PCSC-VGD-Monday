@@ -14,7 +14,8 @@ GameObject:
   - component: {fileID: 6552255474335273409}
   - component: {fileID: 545910674727040073}
   - component: {fileID: 4197019063876605399}
-  m_Layer: 2
+  - component: {fileID: -221448447348196165}
+  m_Layer: 10
   m_Name: lightbulbEnemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -162,8 +163,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 238da6d47a3b1b6408572e019e3a2299, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 5729143077642523528, guid: b7bd2a60ddd0fc04a9a0b0aca56bad30, type: 3}
-  attack: {fileID: 6408123387358451367, guid: 975fb4b51df3c7f42806360c20ed9987, type: 3}
+  playerController: {fileID: 0}
+  player: {fileID: 0}
   playerDetected: 0
   health: 100
   missileDamage: 80
@@ -176,8 +177,27 @@ MonoBehaviour:
   playerDirection: 0
   detectionCooldown: 0
   detectionTimer: 0
-  xRayDistance: 2
+  xRayDistance: 1
   yRayDistance: 0.52
   knockback: 0
   attackCooldown: 0
   attackTimer: 0.6
+--- !u!95 &-221448447348196165
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 545910674727040078}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 0ee55974aec866d498fa588ddea99525, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0

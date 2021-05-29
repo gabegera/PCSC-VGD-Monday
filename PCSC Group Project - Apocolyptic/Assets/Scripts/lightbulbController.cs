@@ -8,6 +8,7 @@ public class lightbulbController : MonoBehaviour
     public GameObject player;
     //public GameObject attack;
     private Rigidbody2D RB;
+    private Animator myAnim;
 
     private Quaternion zero;
 
@@ -37,6 +38,7 @@ public class lightbulbController : MonoBehaviour
         RB = GetComponent<Rigidbody2D>();
         playerController = GameObject.Find("player").GetComponent<playerController>();
         player = GameObject.Find("player");
+        myAnim = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -60,15 +62,17 @@ public class lightbulbController : MonoBehaviour
 
         if (playerDetected == true && detectionCooldown <= 0)
         {
-            if (playerDirection > 1.5)
+            if (playerDirection > 0.8f)
             {
+                myAnim.SetBool("isWalking", true);
                 Vector2 velocity;
                 velocity = RB.velocity;
                 velocity.x = -speed;
                 RB.velocity = velocity;
             }
-            else if (playerDirection < -1.5)
+            else if (playerDirection < -0.8f)
             {
+                myAnim.SetBool("isWalking", true);
                 Vector2 velocity;
                 velocity = RB.velocity;
                 velocity.x = speed;
@@ -76,6 +80,7 @@ public class lightbulbController : MonoBehaviour
             }
             else
             {
+                myAnim.SetBool("isWalking", false);
                 Vector2 velocity;
                 velocity = RB.velocity;
                 velocity.x = 0;
@@ -83,22 +88,40 @@ public class lightbulbController : MonoBehaviour
             }
         }
 
-        if (leftRay.collider.gameObject.Equals(player))
+        if (leftRay)
         {
-            if (attackCooldown <= 0)
-            {
-                playerController.health -= 1;
-                attackCooldown = attackTimer;
-            }
+            if (leftRay.collider.gameObject.name.Contains("player"))
+                {
+                    myAnim.SetBool("isAttacking", true);
+                    myAnim.SetBool("isAttackingRight", false);
 
+                    if (attackCooldown <= 0)
+                    {
+                        playerController.health -= 1;
+                        attackCooldown = attackTimer;
+                    }
+
+                }
         }
-        else if (rightRay.collider.gameObject.Equals(player))
+        else if (rightRay)
         {
-            if (attackCooldown <= 0)
+            if (rightRay.collider.gameObject.name.Contains("player"))
             {
-                playerController.health -= 1;
-                attackCooldown = attackTimer;
+                myAnim.SetBool("isAttackingRight", true);
+                myAnim.SetBool("isAttacking", false);
+
+                if (attackCooldown <= 0)
+                {
+                    playerController.health -= 1;
+                    attackCooldown = attackTimer;
+                }
             }
+        }
+
+        else
+        {
+            myAnim.SetBool("isAttacking", false);
+            myAnim.SetBool("isAttackingRight", false);
         }
 
         if (attackCooldown > 0)

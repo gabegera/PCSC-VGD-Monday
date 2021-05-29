@@ -18,6 +18,7 @@ public class playerController : MonoBehaviour
     public bool missileEquipped;
     public bool volleyEquipped;
     public bool trackingMissileEquipped;
+    public bool isDashing;
 
     //Vectors
     public Vector2 lookpos;
@@ -39,6 +40,7 @@ public class playerController : MonoBehaviour
     public float wallJumpSpeed;
     public float dashTimer;
     public float dashCooldown;
+    public float dashInvin;
     public float dashSpeed;
     public float projSpeed;
     public float projAngle;
@@ -67,6 +69,11 @@ public class playerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (health <= 0)
+        {
+            this.gameObject.SetActive(false);
+        }
+
         feet = transform.position;
         feet.y -= 0.8f;
 
@@ -200,12 +207,17 @@ public class playerController : MonoBehaviour
         {
             dashCooldown -= Time.deltaTime;
         }
+        if (dashCooldown <= (dashTimer - dashInvin))
+        {
+            isDashing = false;
+        }
         //
 
         //Dashing
         if ((Input.GetKeyDown(KeyCode.LeftControl)) && (dashCooldown <= 0))
         {
             dashCooldown = dashTimer;
+            isDashing = true;
             if (isFacingRight == true)
             {
                 speed = dashSpeed;
@@ -414,10 +426,27 @@ public class playerController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.name.Contains("toaster"))
+        if (isDashing == false)
         {
-            health -= 1;
+            if (collision.gameObject.name.Contains("toaster"))
+            {
+                health -= 1;
+            }
+            else if (collision.gameObject.name.Contains("bossBullet"))
+            {
+                health -= 1;
+            }
+            else if (collision.gameObject.name.Contains("Ball"))
+            {
+                health -= 1;
+            }
         }
+
+        if (collision.gameObject.name.Contains("spike"))
+        {
+            health = 0;
+        }
+
     }
 
 }

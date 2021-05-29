@@ -22,6 +22,12 @@ public class gameManager : MonoBehaviour
     public Image halfheart2;
     public Image halfheart3;
 
+    public GameObject playButton;
+    public GameObject restartButton;
+    public GameObject menuButton;
+    public GameObject quitButton;
+    public Text deathText;
+
 
     public Text healthText;
 
@@ -30,6 +36,9 @@ public class gameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        restartButton.SetActive(false);
+        menuButton.SetActive(false);
+        deathText.enabled = (false);
         player = GameObject.Find("player").GetComponent<playerController>();
     }
 
@@ -37,8 +46,21 @@ public class gameManager : MonoBehaviour
     void Update()
     {
         //Updates Health Text
-        healthText.text = "Health: " + player.health;
+        //healthText.text = "Health: " + player.health;
         //
+
+        if (Input.GetKeyDown(KeyCode.Alpha8))
+        {
+            SceneManager.LoadScene("Level1");
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha9))
+        {
+            SceneManager.LoadScene("Level2");
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha0))
+        {
+            SceneManager.LoadScene("BossLevel");
+        }
 
         //Updates Health Icons
         if (player.health <= 5)
@@ -67,6 +89,12 @@ public class gameManager : MonoBehaviour
         }
         //
 
+        if (player.health <= 0)
+        {
+            restartButton.SetActive(true);
+            menuButton.SetActive(true);
+            deathText.enabled = (true);
+        }
 
         //Dash Cooldown
         if (player.dashCooldown <= 0)
@@ -108,4 +136,25 @@ public class gameManager : MonoBehaviour
         }
         //
     }
+
+    public void restart()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public void quit()
+    {
+        Application.Quit();
+    }
+
+    public void menu()
+    {
+        SceneManager.LoadScene("MainMenu");
+    }
+
+    public void play()
+    {
+        SceneManager.LoadScene("Level1");
+    }
+
 }

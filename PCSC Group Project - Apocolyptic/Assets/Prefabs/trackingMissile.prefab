@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 813587126581911570}
   - component: {fileID: 9097781761745854576}
   - component: {fileID: 8549521110624695253}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: trackingMissile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -154,7 +154,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 1.8
+  m_Radius: 0.5
 --- !u!114 &8549521110624695253
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -167,4 +167,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af9dd34f0ca695f499828c5729c5b0c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lookpos: {x: 0, y: 0}
+  trackedObject: {fileID: 0}
+  player: {fileID: 0}
+  enemyPos: {x: 0, y: 0}
+  foundEnemy: 0
